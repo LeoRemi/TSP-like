@@ -1,6 +1,13 @@
 package tsp.solvers;
 
-public class HeldKarp implements TSPSolver
-{
+import tsp.Node;
 
+import java.util.List;
+
+public class HeldKarp extends TSPSolver
+{
+    @Override
+    public List<Node> solve(List<Node> nodes) {
+        return null;
+    }
 }

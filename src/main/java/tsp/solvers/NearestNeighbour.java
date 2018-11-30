@@ -5,7 +5,7 @@ import tsp.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NearestNeighbour implements TSPSolver
+public class NearestNeighbour extends TSPSolver
 {
 
     public List<Node> solve(List<Node> nodes) {
