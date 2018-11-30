@@ -1,3 +1,5 @@
+package tsp;
+
 public class Node
 {
     public final int id;
