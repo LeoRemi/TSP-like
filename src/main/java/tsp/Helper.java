@@ -76,19 +76,20 @@ public class Helper {
         return toReturn;
     }
 
-    public static void sendSolution(String problem_id, int[] array) {
-
+    public static String sendSolution(String problem_id, int[] array) {
         Solution solution = new Solution(problem_id, USERNAME, array);
         Gson jsonBuilder = new GsonBuilder().create();
         String payload = jsonBuilder.toJson(solution);
-        StringEntity entity = new StringEntity(payload, ContentType.APPLICATION_FORM_URLENCODED);
+        StringEntity entity = new StringEntity(payload, ContentType.APPLICATION_JSON);
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost request = new HttpPost(API_HOST);
         request.setEntity(entity);
         try {
             HttpResponse response = httpClient.execute(request);
+            return "[" + response.getStatusLine().getStatusCode() + " - " + response.getStatusLine().getReasonPhrase() + "]";
         } catch (IOException e) {
             e.printStackTrace();
+            return "[EXCEPTION]";
         }
     }
 }

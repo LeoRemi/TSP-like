@@ -27,6 +27,5 @@ public class Main
         int[] intPath = new int[path.size()];
         for (int i = 0; i < intPath.length; i++) intPath[i] = path.get(i).id;
         Helper.sendSolution(problemID, intPath);
-        System.out.println("done.");
     }
 }
