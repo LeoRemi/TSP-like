@@ -14,7 +14,7 @@ public abstract class TSPSolver
         double gain = TSPSolver.gain(TSPSolver.origin, path.get(0));
         for (int i = 1; i < path.size(); i++)
         {
-            gain += TSPSolver.gain(path.get(i-1), path.get(i));
+            gain += TSPSolver.gain(path.get(i-1), path.get(i)) - i;
         }
         return (int)gain;
     }
