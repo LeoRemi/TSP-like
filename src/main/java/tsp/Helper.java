@@ -1,16 +1,35 @@
 package tsp;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+
 public class Helper {
+
+    private static class Solution
+    {
+        public final String problem_id;
+        public final String username;
+        public final int[] orders;
+
+        private Solution(String problem_id, String username, int[] orders) {
+            this.problem_id = problem_id;
+            this.username = username;
+            this.orders = orders;
+        }
+    }
 
     private static final String API_HOST = "http://api.formation.dataheroes.fr:8080/simulation";
     private static final String USERNAME = "galetteSaucisseOverflow";
@@ -22,14 +41,14 @@ public class Helper {
         double gain = Helper.gain(Helper.origin, path.get(0));
         for (int i = 1; i < path.size(); i++)
         {
-            gain += Helper.gain(path.get(i-1), path.get(i)) - i;
+            gain += Helper.gain(path.get(i-1), path.get(i)) - Math.min(i, path.get(i).amount);
         }
         return (int)gain;
     }
 
     public static double gain(Node start, Node end)
     {
-        return end.amount - start.dst(end);
+        return end.amount - Math.abs(start.dst(end));
     }
 
     public static List<Node> readFile(String fileName) {
@@ -38,7 +57,7 @@ public class Helper {
         List<Node> toReturn = new ArrayList<>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-
+            br.readLine();
             while ((line = br.readLine()) != null) {
 
                 String[] node = line.split(cvsSplitBy);
@@ -58,26 +77,18 @@ public class Helper {
     }
 
     public static void sendSolution(String problem_id, int[] array) {
-        String content =
-        "{" +
-            "problem_id : " + problem_id +
-            "username : " + USERNAME +
-            "orders:" + array.toString() +
-        "}";
-        try {
-            URL url = new URL(API_HOST);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("POST");
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(content);
-            wr.flush();
-            wr.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch(IOException io) {
-            io.printStackTrace();
-        }
 
+        Solution solution = new Solution(problem_id, USERNAME, array);
+        Gson jsonBuilder = new GsonBuilder().create();
+        String payload = jsonBuilder.toJson(solution);
+        StringEntity entity = new StringEntity(payload, ContentType.APPLICATION_FORM_URLENCODED);
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost request = new HttpPost(API_HOST);
+        request.setEntity(entity);
+        try {
+            HttpResponse response = httpClient.execute(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

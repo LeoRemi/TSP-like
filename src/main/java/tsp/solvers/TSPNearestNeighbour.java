@@ -25,12 +25,12 @@ public class TSPNearestNeighbour
 
     private static Node popMax(Node origin, List<Node> nodes)
     {
-        double gain = 0;
+        double gain = 0.f;
         Node node = null;
         for (Node n : nodes)
         {
             double tmp = Helper.gain(origin, n);
-            if (tmp > gain)
+            if (node == null || tmp > gain)
             {
                 gain = tmp;
                 node = n;
