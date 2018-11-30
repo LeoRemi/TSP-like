@@ -5,8 +5,7 @@ public class Node
     public final int id;
     public final float lat;
     public final float lng;
-
-    public int amount;
+    public final int amount;
 
     public Node(int id, float lat, float lng, int amount) {
         this.id = id;
