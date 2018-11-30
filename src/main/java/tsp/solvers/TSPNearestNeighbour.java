@@ -1,15 +1,15 @@
 package tsp.solvers;
 
+import tsp.Helper;
 import tsp.Node;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NearestNeighbour extends TSPSolver
+public class TSPNearestNeighbour
 {
-
-    public List<Node> solve(List<Node> nodes) {
-        Node current = origin;
+    public static List<Node> solve(List<Node> nodes) {
+        Node current = Helper.origin;
         List<Node> visited = new ArrayList<>();
         List<Node> notvisited = new ArrayList<>(nodes);
 
@@ -23,13 +23,13 @@ public class NearestNeighbour extends TSPSolver
         return visited;
     }
 
-    private Node popMax(Node origin, List<Node> nodes)
+    private static Node popMax(Node origin, List<Node> nodes)
     {
         double gain = 0;
         Node node = null;
         for (Node n : nodes)
         {
-            double tmp = TSPSolver.gain(origin, n);
+            double tmp = Helper.gain(origin, n);
             if (tmp > gain)
             {
                 gain = tmp;

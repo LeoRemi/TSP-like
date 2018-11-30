@@ -1,4 +1,4 @@
-import tsp.Node;
+package tsp;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,6 +14,23 @@ public class Helper {
 
     private static final String API_HOST = "http://api.formation.dataheroes.fr:8080/simulation";
     private static final String USERNAME = "galetteSaucisseOverflow";
+
+    public static final Node origin = new Node(0, 0.5f, 0.5f, 0);
+
+    public static int score(List<Node> path)
+    {
+        double gain = Helper.gain(Helper.origin, path.get(0));
+        for (int i = 1; i < path.size(); i++)
+        {
+            gain += Helper.gain(path.get(i-1), path.get(i)) - i;
+        }
+        return (int)gain;
+    }
+
+    public static double gain(Node start, Node end)
+    {
+        return end.amount - start.dst(end);
+    }
 
     public static List<Node> readFile(String fileName) {
 

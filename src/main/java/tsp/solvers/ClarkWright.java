@@ -4,10 +4,7 @@ import tsp.Node;
 
 import java.util.List;
 
-public class ClarkWright extends TSPSolver
+public class ClarkWright
 {
-    @Override
-    public List<Node> solve(List<Node> nodes) {
-        return null;
-    }
+
 }
